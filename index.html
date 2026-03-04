@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holi 2025 | Itihas, Khel aur Masti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #fffafb;
+            user-select: none;
+        }
+        .font-handwriting { font-family: 'Caveat', cursive; }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #fff5f7 0%, #fffbeb 50%, #f5f3ff 100%);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        #splashCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .section-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Game Styles */
+        .balloon {
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .balloon:active { transform: scale(1.5); }
+
+        .memory-card {
+            aspect-ratio: 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .card-back {
+            background: linear-gradient(45deg, #ec4899, #f59e0b);
+            color: white;
+        }
+        .card-front {
+            background: white;
+            transform: rotateY(180deg);
+            border: 2px solid #ec4899;
+        }
+
+        .image-placeholder {
+            background: #f3f4f6;
+            border: 2px dashed #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-weight: bold;
+            border-radius: 1.5rem;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body class="hero-gradient">
+
+    <!-- Global Paint Canvas -->
+    <canvas id="splashCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 px-4 py-4 top-0">
+        <div class="max-w-6xl mx-auto flex items-center justify-between glass rounded-3xl px-6 py-4 shadow-xl">
+            <div class="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-orange-500">
+                HOLI UTSAV 🎨
+            </div>
+            <div class="hidden md:flex space-x-6 font-bold text-gray-700">
+                <a href="#home" class="hover:text-pink-600 transition">Mukhya</a>
+                <a href="#history" class="hover:text-pink-600 transition">Itihas</a>
+                <a href="#games" class="hover:text-pink-600 transition">Khel Zone</a>
+                <a href="#regional" class="hover:text-pink-600 transition">Vividh Holi</a>
+                <a href="#wishes" class="hover:text-pink-600 transition">Subhkamnayein</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="paintToggle" onclick="togglePaint()" class="px-4 py-2 bg-pink-100 text-pink-600 rounded-xl font-bold text-xs uppercase hover:bg-pink-200 transition">
+                    Paint: ON
+                </button>
+                <div id="colorMarker" class="w-10 h-10 rounded-full border-4 border-white shadow-lg bg-pink-500 cursor-pointer" onclick="changeGlobalColor()"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-24 px-6 text-center relative z-10">
+        <div class="max-w-4xl">
+            <div class="mb-4 inline-block bg-white/60 backdrop-blur px-6 py-2 rounded-full text-pink-600 font-bold text-sm tracking-widest shadow-sm">
+                RANGON KA TYOHAR, KHUSHIYON KI BAUCHAR ✨
+            </div>
+            <h1 class="text-6xl md:text-9xl font-black text-gray-900 mb-8 tracking-tighter leading-none">
+                Holi Hai <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500">Sabka Tyohar</span>
+            </h1>
+            <div class="mb-10 p-4 border-2 border-pink-100 rounded-3xl bg-white/40">
+                
+            </div>
+            <p class="text-xl md:text-2xl text-gray-600 mb-10 font-medium max-w-2xl mx-auto">
+                Holi ke is pawan parv par, aaiye rangon ki duniya mein kho jayein aur iske itihas ko janein.
+            </p>
+            <div class="flex flex-wrap gap-6 justify-center">
+                <a href="#history" class="px-10 py-5 bg-pink-600 text-white rounded-2xl font-bold text-xl shadow-2xl hover:scale-105 transition-all">
+                    Itihas Janein 📖
+                </a>
+                <a href="#games" class="px-10 py-5 bg-gray-900 text-white rounded-2xl font-bold text-xl shadow-2xl hover:scale-105 transition-all">
+                    Khel Khelein 🎮
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section id="history" class="py-32 px-6 bg-white relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 section-reveal">
+                <h2 class="text-5xl font-black text-gray-900 mb-4">Holi Ka Itihas</h2>
+                <p class="text-pink-500 font-bold text-xl">Kyun manayi jati hai Holi?</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 items-start">
+                <div class="section-reveal">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">1. Prahlad aur Holika ki Kahani</h3>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        Holi ka sabse bada sandesh hai "Burai par Achai ki Jeet". Hiranyakashipu naam ka ek asur raja tha jo chahta tha ki sab uski puja karein. Lekin uska putra Prahlad Bhagwan Vishnu ka param bhakt tha.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        Raja ne apni behen Holika (jise aag se na jalne ka vardan tha) se kaha ki wo Prahlad ko lekar aag mein baith jaye. Lekin chamatkar hua—Holika jal gayi aur bhakt Prahlad bach gaye. Isliye pehli raat ko "Holika Dahan" hota hai.
+                    </p>
+                    <div class="image-placeholder mt-8">
+                        
+                    </div>
+                </div>
+                <div class="section-reveal" style="transition-delay: 200ms;">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">2. Radha-Krishna ka Prem</h3>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        Braj ki Holi Radha aur Krishna ke amar prem ki yaad dilati hai. Krishna ne hi gopiyon par rang dalne ki parampara shuru ki thi, jo aaj tak poore vishwa mein prachalit hai.
+                    </p>
+                    <div class="image-placeholder mb-6">
+                        
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">3. Vasant Ritu ka Agaman</h3>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        Holi sardi ke khatme aur Vasant (Spring) ritu ke swagat ka tyohar hai. Yeh fasal katne ki khushi mein bhi manaya jata hai.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Colors Meaning Section -->
+    <section class="py-24 bg-pink-50/50 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16 section-reveal">
+                <h2 class="text-4xl font-black mb-4">Rangon Ka Mahatva</h2>
+                <p class="text-gray-500">Har rang kuch kehta hai...</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 section-reveal">
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-red-500 rounded-full mx-auto mb-4 border-4 border-white shadow-inner"></div>
+                    <h4 class="font-bold text-red-600">Lal (Red)</h4>
+                    <p class="text-xs text-gray-500">Prem aur Shaurya ka prateek.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-yellow-400 rounded-full mx-auto mb-4 border-4 border-white shadow-inner"></div>
+                    <h4 class="font-bold text-yellow-600">Peela (Yellow)</h4>
+                    <p class="text-xs text-gray-500">Khush-hali aur Samriddhi.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-green-500 rounded-full mx-auto mb-4 border-4 border-white shadow-inner"></div>
+                    <h4 class="font-bold text-green-600">Hara (Green)</h4>
+                    <p class="text-xs text-gray-500">Prakriti aur Nayi Shuruat.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full mx-auto mb-4 border-4 border-white shadow-inner"></div>
+                    <h4 class="font-bold text-blue-600">Neela (Blue)</h4>
+                    <p class="text-xs text-gray-500">Shanti aur Ishwar ka rang.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regional Holi Section -->
+    <section id="regional" class="py-32 px-6 bg-white relative z-10 section-reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black text-gray-900 mb-4">Bharat Ki Vividh Holi</h2>
+                <p class="text-gray-500 font-handwriting text-3xl">Ek tyohar, anek roop!</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-6 rounded-3xl border-orange-100 border">
+                    <div class="image-placeholder mb-4" style="min-height: 150px;"></div>
+                    <h4 class="text-xl font-bold text-orange-600 mb-2">Lathmar Holi (UP)</h4>
+                    <p class="text-sm text-gray-600">Barsana aur Nandgaon mein mahilayein lathiyoin se purushon ko marti hain, jo ki Krishna-Gopi ke beech ki chhedkhani ka ek hissa hai.</p>
+                </div>
+                <div class="glass p-6 rounded-3xl border-pink-100 border">
+                    <div class="image-placeholder mb-4" style="min-height: 150px;"></div>
+                    <h4 class="text-xl font-bold text-pink-600 mb-2">Hola Mohalla (Punjab)</h4>
+                    <p class="text-sm text-gray-600">Sikh samuday ise shaurya aur veerta ke tyohar ke roop mein manate hain, jismein gatka aur martial arts dikhaya jata hai.</p>
+                </div>
+                <div class="glass p-6 rounded-3xl border-purple-100 border">
+                    <div class="image-placeholder mb-4" style="min-height: 150px;"></div>
+                    <h4 class="text-xl font-bold text-purple-600 mb-2">Dol Jatra (Bengal)</h4>
+                    <p class="text-sm text-gray-600">West Bengal mein ise 'Dol Jatra' kehte hain, jahan Radha-Krishna ki moortiyon ko jhoole par jhula kar rang udaya jata hai.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Zone -->
+    <section id="games" class="py-32 px-6 bg-pink-50/30 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 section-reveal">
+                <h2 class="text-5xl font-black text-gray-900 mb-4">Holi Game Zone</h2>
+                <p class="text-gray-500 font-handwriting text-3xl">Jeetne wale ko milegi extra Gujiya!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="glass p-8 rounded-[3rem] shadow-2xl h-[550px] flex flex-col section-reveal">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-black text-pink-600">Balloon Burst</h3>
+                        <div class="text-right"><span id="balloon-score" class="text-3xl font-black">0</span></div>
+                    </div>
+                    <div id="game-balloon-burst" class="flex-grow bg-white/50 rounded-3xl relative overflow-hidden border-2 border-dashed border-pink-200">
+                        <div id="game-start-overlay" class="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
+                            <button onclick="startBalloonGame()" class="px-8 py-3 bg-pink-500 text-white rounded-xl font-bold">Start Game</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-8 rounded-[3rem] shadow-2xl h-[550px] flex flex-col section-reveal">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-black text-orange-500">Rang Match</h3>
+                        <div class="text-right"><span id="memory-moves" class="text-3xl font-black">0</span></div>
+                    </div>
+                    <div id="game-memory" class="flex-grow grid grid-cols-4 gap-3 p-4 bg-white/50 rounded-3xl"></div>
+                    <button onclick="initMemoryGame()" class="mt-4 px-6 py-2 bg-orange-500 text-white rounded-xl font-bold">Reset Board</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishes Section -->
+    <section id="wishes" class="py-32 px-6 bg-gray-900 text-white relative z-10">
+        <div class="max-w-4xl mx-auto text-center section-reveal">
+            <h2 class="text-5xl font-black mb-12">Holi Wishes</h2>
+            <div class="bg-white/10 backdrop-blur-xl p-12 md:p-20 rounded-[4rem] border border-white/20 shadow-2xl">
+                <div id="wishText" class="text-3xl md:text-5xl font-handwriting italic mb-12 h-40 flex items-center justify-center">
+                    "Is Holi, aapke jeevan mein khushiyon ke saare rang bhar jayein!"
+                </div>
+                <button onclick="newWish()" class="px-12 py-5 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-all">
+                    Nayi Wish Dekhein ✨
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-20 text-center bg-white border-t border-gray-100 relative z-10">
+        <div class="text-3xl font-black text-gray-200 tracking-widest mb-4">HOLI HAI! 🎨</div>
+        <p class="text-gray-400 font-medium">Banaya gaya hai Holi 2025 ke liye ❤️</p>
+    </footer>
+
+    <script>
+        // --- Core Paint Engine ---
+        const canvas = document.getElementById('splashCanvas');
+        const ctx = canvas.getContext('2d');
+        const colors = ['#ec4899', '#f59e0b', '#8b5cf6', '#10b981', '#3b82f6', '#ef4444'];
+        let activeColor = colors[0];
+        let paintEnabled = true;
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        function drawSplash(x, y, color) {
+            if(!paintEnabled) return;
+            ctx.fillStyle = color;
+            ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            for (let i = 0; i < 15; i++) {
+                const angle = (i / 15) * Math.PI * 2;
+                const r = 50 + Math.random() * 50;
+                ctx.lineTo(x + Math.cos(angle) * r, y + Math.sin(angle) * r);
+            }
+            ctx.fill();
+        }
+
+        function togglePaint() {
+            paintEnabled = !paintEnabled;
+            document.getElementById('paintToggle').innerText = `Paint: ${paintEnabled ? 'ON' : 'OFF'}`;
+        }
+
+        function changeGlobalColor() {
+            activeColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('colorMarker').style.backgroundColor = activeColor;
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.memory-card')) return;
+            drawSplash(e.clientX, e.clientY, activeColor);
+        });
+
+        function clearCanvas() { ctx.clearRect(0, 0, width, height); }
+
+        // --- Balloon Game ---
+        let bScore = 0;
+        let bActive = false;
+        const bCont = document.getElementById('game-balloon-burst');
+
+        function startBalloonGame() {
+            document.getElementById('game-start-overlay').style.display = 'none';
+            bActive = true; bScore = 0;
+            document.getElementById('balloon-score').innerText = '0';
+            spawnB();
+        }
+
+        function spawnB() {
+            if(!bActive) return;
+            const b = document.createElement('div');
+            b.className = 'balloon';
+            const size = 50 + Math.random() * 30;
+            const col = colors[Math.floor(Math.random() * colors.length)];
+            b.style.cssText = `width:${size}px; height:${size*1.2}px; background:${col}; border-radius:50%; left:${Math.random()*(bCont.offsetWidth-size)}px; bottom:-100px;`;
+            b.onclick = () => { bScore+=10; document.getElementById('balloon-score').innerText=bScore; drawSplash(b.offsetLeft, b.offsetTop, col); b.remove(); };
+            bCont.appendChild(b);
+            let p = -100;
+            const iv = setInterval(() => { p += 3; b.style.bottom = p+'px'; if(p > 600) { clearInterval(iv); b.remove(); } }, 16);
+            setTimeout(spawnB, 1000);
+        }
+
+        // --- Memory Game ---
+        const em = ['🥟', '🥛', '🔫', '🔥', '🌸', '🎨', '🥁', '🪁'];
+        let mCards = [], fCards = [], moves = 0, matches = 0;
+
+        function initMemoryGame() {
+            const cont = document.getElementById('game-memory');
+            cont.innerHTML = '';
+            mCards = [...em, ...em].sort(() => Math.random() - 0.5);
+            moves = 0; matches = 0; fCards = [];
+            document.getElementById('memory-moves').innerText = '0';
+            mCards.forEach(e => {
+                const c = document.createElement('div');
+                c.className = 'memory-card';
+                c.innerHTML = `<div class="memory-card-inner"><div class="card-back">?</div><div class="card-front">${e}</div></div>`;
+                c.onclick = () => {
+                    if (fCards.length < 2 && !c.classList.contains('flipped')) {
+                        c.classList.add('flipped'); fCards.push(c);
+                        if (fCards.length === 2) {
+                            moves++; document.getElementById('memory-moves').innerText = moves;
+                            if (fCards[0].innerText === fCards[1].innerText) { matches++; fCards = []; }
+                            else { setTimeout(() => { fCards.forEach(x => x.classList.remove('flipped')); fCards = []; }, 1000); }
+                        }
+                    }
+                };
+                cont.appendChild(c);
+            });
+        }
+
+        // --- Wishes ---
+        const wishes = ["Is Holi, aapke jeevan mein khushiyon ke saare rang bhar jayein!", "Holi ki hardik badhai! Khush raho, mast raho.", "Rangon ka yeh tyohar aapke ghar mein sukh-shanti laaye.", "Bura na mano, Holi hai! Dher saari mithai khao aur maze karo."];
+        function newWish() { document.getElementById('wishText').innerText = `"${wishes[Math.floor(Math.random()*wishes.length)]}"`; }
+
+        function handleReveal() {
+            document.querySelectorAll('.section-reveal').forEach(s => {
+                if(s.getBoundingClientRect().top < window.innerHeight - 50) s.classList.add('visible');
+            });
+        }
+
+        window.addEventListener('scroll', handleReveal);
+        window.onload = () => { setTimeout(() => { resize(); handleReveal(); initMemoryGame(); }, 300); };
+    </script>
+</body>
+</html>
